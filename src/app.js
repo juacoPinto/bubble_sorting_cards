@@ -66,30 +66,80 @@ draw.addEventListener("click", () => {
   for (let i = 0; i < input.value; i++) {
     randomCard(cards);
     console.log(cardArray);
-    console.log(cardRank);
   }
 });
 
-const bubbleSort = (arr, val) => {
+const bubbleSort = arr => {
   let wall = arr.length - 1; //we start the wall at the end of the array
-  while (wall > 0) {
+
+  while (wall >= 0) {
     let index = 0;
+
     while (index < wall) {
+      let iter = document.createElement("h1");
+
+      iter.innerHTML = counter;
+      counter++;
+      cartaContainer.appendChild(iter);
+      displayCard(arr);
       //compare the adjacent positions, if the right one is bigger, we have to swap
       if (arr[index].r > arr[index + 1].r) {
         let aux = arr[index];
         arr[index] = arr[index + 1];
         arr[index + 1] = aux;
       }
+
       index++;
     }
+
     wall--; //decrease the wall for optimization
   }
   return arr;
 };
+let counter;
 sort.addEventListener("click", () => {
   cartaContainer.innerHTML = "";
-  let sorted = bubbleSort(cardArray, "r");
-
+  counter = 0;
+  let sorted = bubbleSort(cardArray);
   console.log(sorted);
+  // displayCard(sorted);
 });
+const displayCard = array => {
+  for (let i = 0; i < array.length; i++) {
+    let valor = array[i].r;
+    let pinta = array[i].s;
+    let thePinta;
+    if (pinta === "&spades;") {
+      thePinta = "spades";
+    } else if (pinta === "&hearts;") {
+      thePinta = "hearts";
+    } else if (pinta === "&diams;") {
+      thePinta = "diamonds";
+    } else {
+      thePinta = "clubs";
+    }
+    if (valor === 11) {
+      valor = "J";
+    } else if (valor === 12) {
+      valor = "Q";
+    } else if (valor === 13) {
+      valor = "K";
+    } else if (valor === 1) {
+      valor = "A";
+    }
+
+    let carta = document.createElement("div");
+    carta.classList.add("card", pinta, thePinta);
+    carta.innerHTML =
+      '<span class="card-suit top">' +
+      pinta +
+      "</span>" +
+      '<span class="card-value">' +
+      valor +
+      "</span>" +
+      '<span class="card-suit bot">' +
+      pinta +
+      "</span>";
+    cartaContainer.appendChild(carta);
+  }
+};
